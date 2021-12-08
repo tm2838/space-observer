@@ -5,7 +5,7 @@
         "node": true,
         "jest": true
     },
-    "ignorePatterns": ["bundle.js", "webScraper.js", "webpack.config.server.js"],
+    "ignorePatterns": ["bundle.js", "webScraper.js", "webpack.config.js"],
     "extends": [
         "eslint:recommended",
         "plugin:react/recommended",
@@ -15,12 +15,19 @@
     ],
     "parser": "@typescript-eslint/parser",
     "parserOptions": {
-        "project": ["./tsconfig.server.json"]
+        "project": ["./tsconfig.json", ".babelrc.json"]
     },
     "plugins": [
         "react",
         "@typescript-eslint"
     ],
     "rules": {
+        "import/extensions": 0,
+        "@typescript-eslint/no-var-requires": 0
+    },
+    "settings":  {
+        "react":  {
+            "version":  "detect"
+        }
     }
 }
