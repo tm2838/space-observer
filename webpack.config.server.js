@@ -1,21 +1,26 @@
 const path = require('path');
 
 module.exports = {
-  entry: './server/index.js',
+  name: 'server',
+  entry: './server/index.ts',
   output: {
-    filename: 'bundle.js',
+    filename: '[name].js',
     path: path.resolve(__dirname, 'dist'),
   },
   module: {
-    rulse: [
+    rules: [
       {
         test: /\.tsx?$/,
-        use: 'ts-loader',
+        loader: 'ts-loader',
+        options: {
+          configFile: 'tsconfig.server.json',
+        },
         exclude: /node_modules/,
       }
     ]
   },
   resolve: {
     extensions: ['.tsx', '.ts', '.js'],
-  }
+  },
+  mode: 'production',
 };
