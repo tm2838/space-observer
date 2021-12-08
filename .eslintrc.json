@@ -5,7 +5,7 @@
         "node": true,
         "jest": true
     },
-    "ignorePatterns": ["bundle.js"],
+    "ignorePatterns": ["bundle.js", "webScraper.js", "webpack.config.server.js"],
     "extends": [
         "eslint:recommended",
         "plugin:react/recommended",
