@@ -41,7 +41,7 @@ const NavBar: React.FC = () => {
             >
               SPACE OBSERVER
             </Typography>
-            <Box>
+            <Box sx={{ ml: '80%' }}>
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                 <Avatar alt='user profile' src={UserProfile} />
               </IconButton>

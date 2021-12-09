@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import NavBar from './navBar';
 
 const App: React.FC = () => {
-  const [background, setBackground] = useState(null);
+  const [background, setBackground] = useState<string | null>(null);
 
   useEffect(() => {
     fetch('/background')
@@ -21,7 +21,7 @@ const App: React.FC = () => {
     width: '100%',
     height: '1000px',
   }}>
-    <NavBar />
+    {background && <NavBar />}
   </div>
   );
 };
