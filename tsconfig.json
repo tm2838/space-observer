@@ -21,5 +21,5 @@
     "target": "ES6",
     "strict": false
   },
-  "include": ["client/src"]
+  "include": ["client/src", "import-png.d.ts"]
 }
