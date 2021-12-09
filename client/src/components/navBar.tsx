@@ -5,7 +5,7 @@ import {
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import UserProfile from '../static/userProfile.png';
 
-const settings = ['Wish list', 'Visited'];
+const settings: string[] = ['Wish list', 'Visited'];
 
 const darkTheme = createTheme({
   palette: {

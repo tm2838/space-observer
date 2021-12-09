@@ -1,8 +1,19 @@
+/* eslint-disable no-param-reassign */
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
 const axios = require('axios');
 require('dotenv').config();
+
+const { Pool } = require('pg');
+
+const pool = new Pool({
+  user: process.env.POSTGRES_USER,
+  host: 'localhost',
+  database: process.env.POSTGRES_DB,
+  password: process.env.POSTGRES_PASSWORD,
+  port: 5432,
+});
 
 const { NASA_API_KEY } = process.env;
 
@@ -38,6 +49,39 @@ app.get('/background', (req, res) => { //eslint-disable-line
     });
 });
 
+app.get('/searchParks', (req, res) => {
+  const { state } = req.query;
+  let parks;
+  const parkPromises = [];
+  pool.query('SELECT * FROM usparks WHERE state = $1', [state], (err, results) => {
+    if (err) {
+      res.status(500).end();
+    }
+
+    if (!results.rows.length) {
+      res.status(404).end();
+    }
+
+    parks = results.rows;
+
+    parks.forEach((park) => {
+      parkPromises.push(
+        axios({
+          method: 'get',
+          url: park.image,
+          responseType: 'arraybuffer',
+        })
+          .then((imgBuffer) => { park.imgBuffer = imgBuffer.data; }),
+      );
+    });
+
+    Promise.all(parkPromises)
+      .then(() => {
+        res.status(200).send(parks);
+      });
+  });
+});
+
 app.listen(3000, () => {
-  console.log('Listening to port 3000'); //eslint-disable-line
+  console.log('Listening on port 3000'); //eslint-disable-line
 });
