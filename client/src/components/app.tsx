@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-// import { Buffer } from 'buffer';
+import NavBar from './navBar';
 
 const App: React.FC = () => {
   const [background, setBackground] = useState(null);
@@ -21,7 +21,7 @@ const App: React.FC = () => {
     width: '100%',
     height: '1000px',
   }}>
-    <p>Hello from Client</p>
+    <NavBar />
   </div>
   );
 };
