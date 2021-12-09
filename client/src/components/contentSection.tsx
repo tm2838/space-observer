@@ -8,8 +8,10 @@ const ContentSection: React.FC = () => {
   const [parks, setParks] = useState<object[]>([]);
 
   const handleParks = (fetchedParks: object[]) => {
-    setParks(fetchedParks);
-    setPhase('DISPLAY');
+    if (fetchedParks.length) {
+      setParks(fetchedParks);
+      setPhase('DISPLAY');
+    }
   };
 
   return (

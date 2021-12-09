@@ -12,6 +12,7 @@ const StateSelection: React.FC<StateSelectionProps> = ({ onSelect }) => (
         width: 100, mx: '25%', mb: '5%', color: 'black', textAlign: 'center',
       }}
       onChange={onSelect}
+      defaultValue='AL'
     >
       {stateOptions.map((state) => <MenuItem key={state} value={state}>{state}</MenuItem>)}
     </Select>

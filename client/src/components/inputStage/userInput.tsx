@@ -16,7 +16,7 @@ const UserInput: React.FC<UserInputProps> = ({ handleParks }) => {
   };
 
   const handleConfirm = () => {
-    fetch(`/searchParks&state=${state}`)
+    fetch(`/searchParks?state=${state}`)
       .then((results) => results.json())
       .then((parks) => {
         handleParks(parks);
