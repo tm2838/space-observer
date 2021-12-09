@@ -2,6 +2,9 @@ const express = require('express');
 const cors = require('cors');
 const path = require('path');
 const axios = require('axios');
+require('dotenv').config();
+
+const { NASA_API_KEY } = process.env;
 
 const app = express();
 app.use(express.json());
@@ -16,14 +19,22 @@ app.get('/main', (req, res) => { //eslint-disable-line
 });
 
 app.get('/background', (req, res) => { //eslint-disable-line
+  const start = new Date(1995, 6, 16);
+  const end = new Date();
+  const randomDate = new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
+  const randomDateString = randomDate.toISOString().slice(0, 10);
   axios({
     method: 'get',
-    url: 'https://www.darksky.org/wp-content/uploads/2015/04/big-bend-featured-700px-460px.png',
-    responseType: 'arraybuffer',
+    url: `https://api.nasa.gov/planetary/apod?api_key=${NASA_API_KEY}&date=${randomDateString}`,
   })
-    .then((result) => {
+    .then((result) => axios({
+      method: 'get',
+      url: result.data.url,
+      responseType: 'arraybuffer',
+    }))
+    .then((imgBuffer) => {
       res.contentType('application/octet-stream');
-      res.send(result.data);
+      res.send(imgBuffer.data);
     });
 });
 
