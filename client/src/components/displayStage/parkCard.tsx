@@ -21,7 +21,7 @@ const ParkCard: React.FC<ParkCardProps> = ({ park }) => {
         }}
         borderColor='#fff'
       >
-        <img src={`data:'image/png';base64,${img}`} alt={park.name} height='150px' style={{ margin: 'auto' }}/>
+        <img src={`data:'image/png';base64,${img}`} alt={park.name} height='150px' width='240px' style={{ margin: 'auto' }}/>
         <Typography
           variant='h6'
           component='div'

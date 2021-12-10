@@ -10,7 +10,7 @@ interface UserInputProps {
 }
 
 const UserInput: React.FC<UserInputProps> = ({ handleParks, handleState }) => {
-  const [state, setState] = useState<string>('');
+  const [state, setState] = useState<string>('AL');
 
   const handleSelection = (event: SelectChangeEvent) => {
     setState(event.target.value);
