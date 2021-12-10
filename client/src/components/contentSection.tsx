@@ -3,6 +3,7 @@ import { Box } from '@mui/material';
 import { Phase, Park, States } from '../types/types';
 import UserInput from './inputStage/userInput';
 import ParksList from './displayStage/parksList';
+import Loading from './loadingStage/loading';
 
 const ContentSection: React.FC = () => {
   const [phase, setPhase] = useState<Phase>('INPUT');
@@ -16,6 +17,7 @@ const ContentSection: React.FC = () => {
 
   const handleState = (currentState: States) => {
     setState(currentState);
+    setPhase('LOADING');
   };
 
   const handleBack = () => {
@@ -35,6 +37,7 @@ const ContentSection: React.FC = () => {
     >
       {phase === 'INPUT' && <UserInput handleParks={handleParks} handleState={handleState} />}
       {phase === 'DISPLAY' && <ParksList parks={parks} state={state} handleBack={handleBack} />}
+      {phase === 'LOADING' && <Loading state={state} />}
     </Box>
   );
 };

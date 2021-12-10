@@ -17,18 +17,17 @@ const UserInput: React.FC<UserInputProps> = ({ handleParks, handleState }) => {
   };
 
   const handleConfirm = () => {
+    handleState(state);
     fetch(`/searchParks?state=${state}`)
       .then((results) => {
         if (results.status === 404) {
           handleParks([]);
-          handleState(state);
         }
 
         return results.json();
       })
       .then((parks) => {
         handleParks(parks);
-        handleState(state);
       });
   };
 
