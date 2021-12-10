@@ -5,19 +5,27 @@ import {
 import StateSelection from './stateSelection';
 
 interface UserInputProps {
-  handleParks: (a: object[]) => void
+  handleParks: (a: object[]) => void,
+  handleState: (a: string) => void,
 }
 
-const UserInput: React.FC<UserInputProps> = ({ handleParks }) => {
-  const [state, setState] = useState<string>('');
+const UserInput: React.FC<UserInputProps> = ({ handleParks, handleState }) => {
+  const [state, setState] = useState<string>('AL');
 
   const handleSelection = (event: SelectChangeEvent) => {
     setState(event.target.value);
   };
 
   const handleConfirm = () => {
+    handleState(state);
     fetch(`/searchParks?state=${state}`)
-      .then((results) => results.json())
+      .then((results) => {
+        if (results.status === 404) {
+          handleParks([]);
+        }
+
+        return results.json();
+      })
       .then((parks) => {
         handleParks(parks);
       });

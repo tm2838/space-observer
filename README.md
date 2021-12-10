@@ -5,6 +5,9 @@ An app providing info about dark sky parks located in your state.
 ### Language
 - JavaScript
 - TypeScript
+### Libraries
+- [Material UI](https://mui.com/)
+- [Font Awesome](https://fontawesome.com/)
 ### Web-scraping
 - axios
 - jsdom

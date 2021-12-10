@@ -1,17 +1,27 @@
 import React, { useState } from 'react';
 import { Box } from '@mui/material';
-import { Phase } from '../types/types';
+import { Phase, Park, States } from '../types/types';
 import UserInput from './inputStage/userInput';
+import ParksList from './displayStage/parksList';
+import Loading from './loadingStage/loading';
 
 const ContentSection: React.FC = () => {
   const [phase, setPhase] = useState<Phase>('INPUT');
-  const [parks, setParks] = useState<object[]>([]);
+  const [parks, setParks] = useState<Park[]>([]);
+  const [state, setState] = useState<string>('');
 
-  const handleParks = (fetchedParks: object[]) => {
-    if (fetchedParks.length) {
-      setParks(fetchedParks);
-      setPhase('DISPLAY');
-    }
+  const handleParks = (fetchedParks: Park[]) => {
+    setParks(fetchedParks);
+    setPhase('DISPLAY');
+  };
+
+  const handleState = (currentState: States) => {
+    setState(currentState);
+    setPhase('LOADING');
+  };
+
+  const handleBack = () => {
+    setPhase('INPUT');
   };
 
   return (
@@ -22,12 +32,12 @@ const ContentSection: React.FC = () => {
         p: 8,
         width: 4 / 8,
         height: 4 / 8,
-        backgroundColor: '#fff',
-        opacity: [0, 0, 0.5],
+        backgroundColor: 'rgba(255, 255, 255, 0.5)',
       }}
     >
-      {phase === 'INPUT' && <UserInput handleParks={handleParks} />}
-      {phase === 'DISPLAY' && parks && <></>}
+      {phase === 'INPUT' && <UserInput handleParks={handleParks} handleState={handleState} />}
+      {phase === 'DISPLAY' && <ParksList parks={parks} state={state} handleBack={handleBack} />}
+      {phase === 'LOADING' && <Loading state={state} />}
     </Box>
   );
 };
