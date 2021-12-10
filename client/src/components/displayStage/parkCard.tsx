@@ -17,11 +17,11 @@ const ParkCard: React.FC<ParkCardProps> = ({ park }) => {
     <a href={park.webpage} style={{ textDecoration: 'none', color: 'black' }}>
       <Box
         sx={{
-          p: 4, height: 5 / 8, display: 'flex', flexDirection: 'column', alignItems: 'flex-start', justifyContent: 'flex-start',
+          p: 4, height: '250px', display: 'flex', flexDirection: 'column', alignItems: 'flex-start', justifyContent: 'flex-start',
         }}
         borderColor='#fff'
       >
-        <img src={`data:'image/png';base64,${img}`} alt={park.name} height='150px' width='240px' style={{ margin: 'auto' }}/>
+        <img src={`data:'image/png';base64,${img}`} alt={park.name} height='150px' width='240px' style={{ marginLeft: 'auto', marginRight: 'auto' }}/>
         <Typography
           variant='h6'
           component='div'

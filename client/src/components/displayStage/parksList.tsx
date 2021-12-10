@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Box, Typography, Button } from '@mui/material';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCaretLeft, faCaretRight } from '@fortawesome/free-solid-svg-icons';
 import { Park } from '../../types/types';
 import ParkCard from './parkCard';
 
@@ -57,24 +59,24 @@ const ParksList: React.FC<ParksListProps> = ({ parks, state, handleBack }) => {
           component='div'
           color='black'
         >
-          Parks in {state}
+          Dark sky parks in {state}
         </Typography>
       </Box>
 
       <Box
         sx={{
-          display: 'flex', flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'center',
+          display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start',
         }}
       >
-        {showCarousel && <button onClick={handleLeft}></button>}
+        {showCarousel && <FontAwesomeIcon icon={faCaretLeft} onClick={handleLeft} size='2x' style={{ cursor: 'pointer' }}/>}
         {displayedParks.map((park) => <ParkCard park={park} key={park.id} />)}
-        {showCarousel && <button onClick={handleRight}></button>}
+        {showCarousel && <FontAwesomeIcon icon={faCaretRight} onClick={handleRight} size='2x' style={{ cursor: 'pointer' }}/>}
         {!parks.length
           && <Typography
           variant='h6'
           component='div'
           >
-            No parks found.
+            No dark sky parks found in {state}.
           </Typography>
         }
       </Box>
