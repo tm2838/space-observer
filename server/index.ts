@@ -59,26 +59,26 @@ app.get('/searchParks', (req, res) => {
     }
 
     if (!results.rows.length) {
-      res.status(404).end();
-    }
+      res.status(404).send('404: Parks in requested state not found');
+    } else {
+      parks = results.rows;
 
-    parks = results.rows;
-
-    parks.forEach((park) => {
-      parkPromises.push(
-        axios({
-          method: 'get',
-          url: park.image,
-          responseType: 'arraybuffer',
-        })
-          .then((imgBuffer) => { park.imgBuffer = imgBuffer.data; }),
-      );
-    });
-
-    Promise.all(parkPromises)
-      .then(() => {
-        res.status(200).send(parks);
+      parks.forEach((park) => {
+        parkPromises.push(
+          axios({
+            method: 'get',
+            url: park.image,
+            responseType: 'arraybuffer',
+          })
+            .then((imgBuffer) => { park.imgBuffer = imgBuffer.data; }),
+        );
       });
+
+      Promise.all(parkPromises)
+        .then(() => {
+          res.status(200).send(parks);
+        });
+    }
   });
 });
 

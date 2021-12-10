@@ -5,10 +5,11 @@ import {
 import StateSelection from './stateSelection';
 
 interface UserInputProps {
-  handleParks: (a: object[]) => void
+  handleParks: (a: object[]) => void,
+  handleState: (a: string) => void,
 }
 
-const UserInput: React.FC<UserInputProps> = ({ handleParks }) => {
+const UserInput: React.FC<UserInputProps> = ({ handleParks, handleState }) => {
   const [state, setState] = useState<string>('');
 
   const handleSelection = (event: SelectChangeEvent) => {
@@ -17,9 +18,17 @@ const UserInput: React.FC<UserInputProps> = ({ handleParks }) => {
 
   const handleConfirm = () => {
     fetch(`/searchParks?state=${state}`)
-      .then((results) => results.json())
+      .then((results) => {
+        if (results.status === 404) {
+          handleParks([]);
+          handleState(state);
+        }
+
+        return results.json();
+      })
       .then((parks) => {
         handleParks(parks);
+        handleState(state);
       });
   };
 
