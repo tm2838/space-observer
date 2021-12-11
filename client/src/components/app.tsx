@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import NavBar from './navBar';
 import ContentSection from './contentSection';
+import { Phase, Mode } from '../types/types';
 
 const App: React.FC = () => {
   const [background, setBackground] = useState<string | null>(null);
+  const [phase, setPhase] = useState<Phase>('INPUT');
+  const [mode, setMode] = useState<Mode>('PARKS');
 
   useEffect(() => {
     fetch('/background')
@@ -22,7 +25,16 @@ const App: React.FC = () => {
       width: '100%',
       height: '1000px',
     }}>
-      {background && <><NavBar /><ContentSection /></>}
+      {background
+        && <>
+          <NavBar handleModeChange={setMode} handlePhaseChange={setPhase} />
+          <ContentSection
+            handleModeChange={setMode}
+            handlePhaseChange={setPhase}
+            phase={phase}
+            mode={mode}
+          />
+        </>}
     </div>
   );
 };

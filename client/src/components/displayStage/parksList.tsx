@@ -2,21 +2,26 @@ import React, { useEffect, useState } from 'react';
 import { Box, Typography, Button } from '@mui/material';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCaretLeft, faCaretRight } from '@fortawesome/free-solid-svg-icons';
-import { Park } from '../../types/types';
+import { Park, Mode } from '../../types/types';
 import ParkCard from './parkCard';
 
 interface ParksListProps {
   parks: Park[],
   state?: string,
   handleBack?: () => void,
+  handleWishList: (a: Park) => void,
+  handleVisited: (a: Park) => void,
+  mode: Mode,
 }
 
-const ParksList: React.FC<ParksListProps> = ({ parks, state, handleBack }) => {
+const ParksList: React.FC<ParksListProps> = ({
+  parks, state, handleBack, handleWishList, handleVisited, mode,
+}) => {
   const [activeIdx, setActiveIdx] = useState<number>(1);
   const [displayedParks, setDisplayedParks] = useState<Park[]>(parks.slice(0, 3));
   const showCarousel = parks.length > 3;
 
-  const handleLeft = () => {
+  const handleRight = () => {
     if (activeIdx === parks.length - 1) {
       setActiveIdx(0);
     } else {
@@ -24,7 +29,7 @@ const ParksList: React.FC<ParksListProps> = ({ parks, state, handleBack }) => {
     }
   };
 
-  const handleRight = () => {
+  const handleLeft = () => {
     if (activeIdx === 0) {
       setActiveIdx(parks.length - 1);
     } else {
@@ -59,7 +64,9 @@ const ParksList: React.FC<ParksListProps> = ({ parks, state, handleBack }) => {
           component='div'
           color='black'
         >
-          Dark sky parks in {state}
+          {mode === 'PARKS' && `Dark sky parks in ${state}`}
+          {mode === 'WISHLIST' && 'Wish List'}
+          {mode === 'VISITED' && 'Visited'}
         </Typography>
       </Box>
 
@@ -69,14 +76,25 @@ const ParksList: React.FC<ParksListProps> = ({ parks, state, handleBack }) => {
         }}
       >
         {showCarousel && <FontAwesomeIcon icon={faCaretLeft} onClick={handleLeft} size='2x' style={{ cursor: 'pointer' }}/>}
-        {displayedParks.map((park) => <ParkCard park={park} key={park.id} />)}
+        {
+          displayedParks.map(
+            (park) => <ParkCard
+            park={park}
+            key={park.id}
+            handleWishList={handleWishList}
+            handleVisited={handleVisited}
+            />,
+          )
+        }
         {showCarousel && <FontAwesomeIcon icon={faCaretRight} onClick={handleRight} size='2x' style={{ cursor: 'pointer' }}/>}
         {!parks.length
           && <Typography
           variant='h6'
           component='div'
           >
-            No dark sky parks found in {state}.
+            {mode === 'PARKS' && `No dark sky parks found in ${state}`}
+            {mode === 'WISHLIST' && 'No parks in wish list'}
+            {mode === 'VISITED' && 'No visited parks'}
           </Typography>
         }
       </Box>
@@ -88,7 +106,7 @@ const ParksList: React.FC<ParksListProps> = ({ parks, state, handleBack }) => {
           color: 'black', width: 1 / 5, mx: '25%', mb: '5%',
         }}
         onClick={handleBack}>
-          Try Another State
+          {mode === 'PARKS' ? 'Try Another State' : 'Choose a state'}
       </Button>
     </Box>
   );

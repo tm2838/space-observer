@@ -1,4 +1,5 @@
 export type Phase = 'INPUT' | 'DISPLAY' | 'LOADING';
+export type Mode = 'PARKS' | 'WISHLIST' | 'VISITED' | 'BACKGROUND';
 
 export type States = 'AL' | 'AK' | 'AZ' | 'AR' | 'CA' | 'CO' | 'CT' | 'DE' | 'FL' | 'GA' | 'HI' | 'ID'
 | 'IL' | 'IN' | 'IA' | 'KS' | 'KY' | 'LA' | 'ME' | 'MD' | 'MA' | 'MI' | 'MN' | 'MS' | 'MO' | 'MT'
