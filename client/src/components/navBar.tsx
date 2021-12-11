@@ -1,11 +1,13 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState } from 'react';
 import {
   AppBar, Box, Toolbar, Typography, IconButton, Container, Avatar, Menu, MenuItem,
 } from '@mui/material';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import UserProfile from '../static/userProfile.png';
+import { Phase, Mode } from '../types/types';
 
-const settings: string[] = ['Wish list', 'Visited'];
+const settings: string[] = ['Wish list', 'Visited', 'About the background'];
 
 const darkTheme = createTheme({
   palette: {
@@ -16,15 +18,33 @@ const darkTheme = createTheme({
   },
 });
 
-const NavBar: React.FC = () => {
+interface NavBarProps {
+  handleModeChange: (a: Mode) => void,
+  handlePhaseChange: (a: Phase) => void,
+}
+
+const NavBar: React.FC<NavBarProps> = ({ handleModeChange, handlePhaseChange }) => {
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
 
   const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElUser(event.currentTarget);
   };
 
-  const handleCloseUserMenu = (event: React.MouseEvent<HTMLElement>) => {
-    console.log(event.currentTarget); //eslint-disable-line
+  const handleCloseUserMenu = () => {
+    setAnchorElUser(null);
+  };
+
+  const handleClickMenuItem = (event: React.MouseEvent<HTMLElement>) => {
+    let currentMode;
+    if ((event.target as HTMLElement).innerText === 'Wish list') {
+      currentMode = 'WISHLIST';
+    } else if ((event.target as HTMLElement).innerText === 'Visited') {
+      currentMode = 'VISITED';
+    } else {
+      currentMode = 'BACKGROUND';
+    }
+    handleModeChange(currentMode);
+    handlePhaseChange('DISPLAY');
     setAnchorElUser(null);
   };
 
@@ -62,7 +82,7 @@ const NavBar: React.FC = () => {
                 onClose={handleCloseUserMenu}
               >
                 {settings.map((setting) => (
-                  <MenuItem key={setting} onClick={handleCloseUserMenu}>
+                  <MenuItem key={setting} onClick={handleClickMenuItem}>
                     <Typography textAlign='center'>{setting}</Typography>
                   </MenuItem>
                 ))}

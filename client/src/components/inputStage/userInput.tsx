@@ -3,13 +3,15 @@ import {
   Box, Typography, Button, SelectChangeEvent,
 } from '@mui/material';
 import StateSelection from './stateSelection';
+import { Mode } from '../../types/types';
 
 interface UserInputProps {
   handleParks: (a: object[]) => void,
   handleState: (a: string) => void,
+  handleModeChange: (a: Mode) => void,
 }
 
-const UserInput: React.FC<UserInputProps> = ({ handleParks, handleState }) => {
+const UserInput: React.FC<UserInputProps> = ({ handleParks, handleState, handleModeChange }) => {
   const [state, setState] = useState<string>('AL');
 
   const handleSelection = (event: SelectChangeEvent) => {
@@ -18,6 +20,7 @@ const UserInput: React.FC<UserInputProps> = ({ handleParks, handleState }) => {
 
   const handleConfirm = () => {
     handleState(state);
+    handleModeChange('PARKS');
     fetch(`/searchParks?state=${state}`)
       .then((results) => {
         if (results.status === 404) {
