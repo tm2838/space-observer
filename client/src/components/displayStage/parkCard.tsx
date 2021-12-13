@@ -1,19 +1,19 @@
 /* eslint-disable new-cap */
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { Buffer } from 'buffer';
 import { Box, Typography } from '@mui/material';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart as regularHeart, faCheckSquare as regularCheck } from '@fortawesome/free-regular-svg-icons';
 import { faHeart as solidHeart, faCheckSquare as solidCheck } from '@fortawesome/free-solid-svg-icons';
 import { Park } from '../../types/types';
+import { mainContext } from '../../spaceObserverContext';
 
 interface ParkCardProps {
   park: Park,
-  handleWishList: (a: Park) => void,
-  handleVisited: (a: Park) => void,
 }
 
-const ParkCard: React.FC<ParkCardProps> = ({ park, handleWishList, handleVisited }) => {
+const ParkCard: React.FC<ParkCardProps> = ({ park }) => {
+  const { state: { mode }, dispatch } = useContext(mainContext);
   const { data } = park.imgBuffer;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const img = new (Buffer as any).from(data).toString('base64');
@@ -22,16 +22,12 @@ const ParkCard: React.FC<ParkCardProps> = ({ park, handleWishList, handleVisited
   const [wantToGo, setWantToGo] = useState<boolean>(false);
 
   const handleVisit = () => {
-    if (!visited) {
-      handleVisited(park);
-    }
+    dispatch({ type: 'SET_VISITED', park });
     setVisited(!visited);
   };
 
   const handleWantToGo = () => {
-    if (!wantToGo) {
-      handleWishList(park);
-    }
+    dispatch({ type: 'SET_WISHLIST', park });
     setWantToGo(!wantToGo);
   };
 
@@ -54,15 +50,19 @@ const ParkCard: React.FC<ParkCardProps> = ({ park, handleWishList, handleVisited
           </Box>
         </a>
         <Box sx={{
-          display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: '100%',
+          display: 'flex', flexDirection: 'row', justifyContent: 'space-around', width: '100%',
         }}>
-          {!wantToGo
-            ? <FontAwesomeIcon icon={regularHeart} style={{ cursor: 'pointer' }} onClick={handleWantToGo} />
-            : <FontAwesomeIcon icon={solidHeart} style={{ cursor: 'pointer' }} onClick={handleWantToGo} />
+          { mode === 'PARKS' && !wantToGo
+            && <FontAwesomeIcon icon={regularHeart} style={{ cursor: 'pointer' }} onClick={handleWantToGo} />
           }
-          {!visited
-            ? <FontAwesomeIcon icon={regularCheck} style={{ cursor: 'pointer' }} onClick={handleVisit}/>
-            : <FontAwesomeIcon icon={solidCheck} style={{ cursor: 'pointer' }} onClick={handleVisit}/>
+          { ((mode === 'PARKS' && wantToGo) || (mode === 'WISHLIST'))
+            && <FontAwesomeIcon icon={solidHeart} style={{ cursor: 'pointer' }} onClick={handleWantToGo} />
+          }
+          { mode === 'PARKS' && !visited
+            && <FontAwesomeIcon icon={regularCheck} style={{ cursor: 'pointer' }} onClick={handleVisit}/>
+          }
+          { ((mode === 'PARKS' && visited) || (mode === 'VISITED'))
+            && <FontAwesomeIcon icon={solidCheck} style={{ cursor: 'pointer' }} onClick={handleVisit}/>
           }
         </Box>
       </Box>

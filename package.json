@@ -5,7 +5,7 @@
   "main": "server/index.ts",
   "scripts": {
     "start": "npx nodemon server/index.ts",
-    "scrape": "node webScraper.js",
+    "scrape": "node webScraping/webScraper.js",
     "build:client": "webpack --config webpack.config.js",
     "test": "npm test",
     "lint": "eslint . --ext .js --ext .ts --ext .tsx",

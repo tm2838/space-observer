@@ -8,7 +8,7 @@
     "isolatedModules": false,
     "jsx": "react-jsx",
     "lib": ["dom", "dom.iterable", "esnext"],
-    "module": "esnext",
+    "module": "CommonJS",
     "moduleResolution": "node",
     // "noEmit": true,
     "noFallthroughCasesInSwitch": false,
@@ -19,7 +19,8 @@
     "inlineSources": true,
     "sourceRoot": "/",
     "target": "ES6",
-    "strict": false
+    "strict": false,
+    "types": ["node"],
   },
   "include": ["client/src", "import-png.d.ts"]
 }

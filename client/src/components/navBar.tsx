@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import {
   AppBar, Box, Toolbar, Typography, IconButton, Container, Avatar, Menu, MenuItem,
 } from '@mui/material';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
+import { mainContext } from '../spaceObserverContext';
 import UserProfile from '../static/userProfile.png';
-import { Phase, Mode } from '../types/types';
 
 const settings: string[] = ['Wish list', 'Visited', 'About the background'];
 
@@ -18,12 +18,8 @@ const darkTheme = createTheme({
   },
 });
 
-interface NavBarProps {
-  handleModeChange: (a: Mode) => void,
-  handlePhaseChange: (a: Phase) => void,
-}
-
-const NavBar: React.FC<NavBarProps> = ({ handleModeChange, handlePhaseChange }) => {
+const NavBar: React.FC = () => {
+  const { dispatch } = useContext(mainContext);
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
 
   const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
@@ -35,16 +31,14 @@ const NavBar: React.FC<NavBarProps> = ({ handleModeChange, handlePhaseChange }) 
   };
 
   const handleClickMenuItem = (event: React.MouseEvent<HTMLElement>) => {
-    let currentMode;
     if ((event.target as HTMLElement).innerText === 'Wish list') {
-      currentMode = 'WISHLIST';
+      dispatch({ type: 'SET_MODE', mode: 'WISHLIST' });
     } else if ((event.target as HTMLElement).innerText === 'Visited') {
-      currentMode = 'VISITED';
+      dispatch({ type: 'SET_MODE', mode: 'VISITED' });
     } else {
-      currentMode = 'BACKGROUND';
+      dispatch({ type: 'SET_MODE', mode: 'BACKGROUND' });
     }
-    handleModeChange(currentMode);
-    handlePhaseChange('DISPLAY');
+    dispatch({ type: 'SET_PHASE', phase: 'DISPLAY' });
     setAnchorElUser(null);
   };
 

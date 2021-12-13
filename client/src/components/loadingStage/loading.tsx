@@ -1,11 +1,10 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Box, Typography, LinearProgress } from '@mui/material';
+import { mainContext } from '../../spaceObserverContext';
 
-interface LoadingProps {
-  state: string,
-}
-
-const Loading: React.FC<LoadingProps> = ({ state }) => (
+const Loading: React.FC = () => {
+  const { state: { currentState } } = useContext(mainContext);
+  return (
   <Box
   sx={{
     p: 4, height: 5 / 8, display: 'flex', flexDirection: 'column', alignItems: 'center',
@@ -18,13 +17,14 @@ const Loading: React.FC<LoadingProps> = ({ state }) => (
       component='div'
       color='black'
     >
-      Parks in {state}
+      Parks in {currentState}
     </Typography>
   </Box>
   <Box sx={{ width: '100%' }}>
     <LinearProgress />
   </Box>
 </Box>
-);
+  );
+};
 
 export default Loading;
