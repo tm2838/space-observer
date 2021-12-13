@@ -1,48 +1,16 @@
-import React, { useState } from 'react';
+import React, { useContext } from 'react';
 import { Box } from '@mui/material';
-import {
-  Phase, Park, States, Mode,
-} from '../types/types';
 import UserInput from './inputStage/userInput';
 import ParksList from './displayStage/parksList';
 import Loading from './loadingStage/loading';
+import { mainContext } from '../spaceObserverContext';
 
-interface ContentSectionProps {
-  mode: Mode,
-  phase: Phase,
-  handlePhaseChange: (a: Phase) => void,
-  handleModeChange: (a: Mode) => void,
-}
-
-const ContentSection: React.FC<ContentSectionProps> = ({
-  phase, mode, handleModeChange, handlePhaseChange,
-}) => {
-  const [parks, setParks] = useState<Park[]>([]);
-  const [state, setState] = useState<string>('');
-  const [wishList, setWishList] = useState<Park[]>([]);
-  const [visited, setVisited] = useState<Park[]>([]);
-
-  const handleParks = (fetchedParks: Park[]) => {
-    setParks(fetchedParks);
-    handlePhaseChange('DISPLAY');
-  };
-
-  const handleState = (currentState: States) => {
-    setState(currentState);
-    handlePhaseChange('LOADING');
-  };
-
-  const handleBack = () => {
-    handlePhaseChange('INPUT');
-  };
-
-  const handleWishList = (likedPark: Park) => {
-    setWishList([...wishList, likedPark]);
-  };
-
-  const handleVisited = (visitedPark: Park) => {
-    setVisited([...visited, visitedPark]);
-  };
+const ContentSection: React.FC = () => {
+  const {
+    state: {
+      phase, mode, parks, wishList, visited,
+    },
+  } = useContext(mainContext);
 
   return (
     <Box
@@ -55,11 +23,11 @@ const ContentSection: React.FC<ContentSectionProps> = ({
         backgroundColor: 'rgba(255, 255, 255, 0.5)',
       }}
     >
-      {phase === 'INPUT' && <UserInput handleParks={handleParks} handleState={handleState} handleModeChange={handleModeChange} />}
-      {phase === 'DISPLAY' && mode === 'PARKS' && <ParksList parks={parks} state={state} handleBack={handleBack} handleWishList={handleWishList} handleVisited={handleVisited} mode={mode} />}
-      {phase === 'DISPLAY' && mode === 'WISHLIST' && <ParksList parks={wishList} state={state} handleBack={handleBack} handleWishList={handleWishList} handleVisited={handleVisited} mode={mode} />}
-      {phase === 'DISPLAY' && mode === 'VISITED' && <ParksList parks={visited} state={state} handleBack={handleBack} handleWishList={handleWishList} handleVisited={handleVisited} mode={mode} />}
-      {phase === 'LOADING' && <Loading state={state} />}
+      {phase === 'INPUT' && <UserInput />}
+      {phase === 'DISPLAY' && mode === 'PARKS' && <ParksList parks={parks} />}
+      {phase === 'DISPLAY' && mode === 'WISHLIST' && <ParksList parks={wishList} />}
+      {phase === 'DISPLAY' && mode === 'VISITED' && <ParksList parks={visited} />}
+      {phase === 'LOADING' && <Loading />}
     </Box>
   );
 };

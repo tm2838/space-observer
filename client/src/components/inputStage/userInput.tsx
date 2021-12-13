@@ -1,36 +1,25 @@
-import React, { useState } from 'react';
-import {
-  Box, Typography, Button, SelectChangeEvent,
-} from '@mui/material';
+import React, { useContext } from 'react';
+import { Box, Typography, Button } from '@mui/material';
 import StateSelection from './stateSelection';
-import { Mode } from '../../types/types';
+import { mainContext } from '../../spaceObserverContext';
 
-interface UserInputProps {
-  handleParks: (a: object[]) => void,
-  handleState: (a: string) => void,
-  handleModeChange: (a: Mode) => void,
-}
-
-const UserInput: React.FC<UserInputProps> = ({ handleParks, handleState, handleModeChange }) => {
-  const [state, setState] = useState<string>('AL');
-
-  const handleSelection = (event: SelectChangeEvent) => {
-    setState(event.target.value);
-  };
+const UserInput: React.FC = () => {
+  const { state: { currentState }, dispatch } = useContext(mainContext);
 
   const handleConfirm = () => {
-    handleState(state);
-    handleModeChange('PARKS');
-    fetch(`/searchParks?state=${state}`)
+    dispatch({ type: 'SET_MODE', mode: 'PARKS' });
+    dispatch({ type: 'SET_PHASE', phase: 'LOADING' });
+    fetch(`/searchParks?state=${currentState}`)
       .then((results) => {
         if (results.status === 404) {
-          handleParks([]);
+          dispatch({ type: 'SET_PARKS', parks: [] });
         }
 
         return results.json();
       })
-      .then((parks) => {
-        handleParks(parks);
+      .then((fetchedParks) => {
+        dispatch({ type: 'SET_PARKS', parks: fetchedParks });
+        dispatch({ type: 'SET_PHASE', phase: 'DISPLAY' });
       });
   };
 
@@ -47,7 +36,7 @@ const UserInput: React.FC<UserInputProps> = ({ handleParks, handleState, handleM
         Which state are you in?
       </Typography>
 
-      <StateSelection onSelect={handleSelection}/>
+      <StateSelection />
 
       <Button
         variant='outlined'

@@ -1,22 +1,21 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { Box, Typography, Button } from '@mui/material';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCaretLeft, faCaretRight } from '@fortawesome/free-solid-svg-icons';
-import { Park, Mode } from '../../types/types';
+import { Park } from '../../types/types';
 import ParkCard from './parkCard';
+import { mainContext } from '../../spaceObserverContext';
 
-interface ParksListProps {
+interface ParkListProps {
   parks: Park[],
-  state?: string,
-  handleBack?: () => void,
-  handleWishList: (a: Park) => void,
-  handleVisited: (a: Park) => void,
-  mode: Mode,
 }
-
-const ParksList: React.FC<ParksListProps> = ({
-  parks, state, handleBack, handleWishList, handleVisited, mode,
-}) => {
+const ParksList: React.FC<ParkListProps> = ({ parks }) => {
+  const {
+    state: {
+      mode, currentState,
+    },
+    dispatch,
+  } = useContext(mainContext);
   const [activeIdx, setActiveIdx] = useState<number>(1);
   const [displayedParks, setDisplayedParks] = useState<Park[]>(parks.slice(0, 3));
   const showCarousel = parks.length > 3;
@@ -40,16 +39,26 @@ const ParksList: React.FC<ParksListProps> = ({
   useEffect(() => {
     if (showCarousel) {
       if (activeIdx === 0) {
-        const parksToDisplay = [parks[parks.length - 1], ...parks.slice(0, 2)];
+        const parksToDisplay = [
+          parks[parks.length - 1],
+          ...parks.slice(0, 2),
+        ];
         setDisplayedParks(parksToDisplay);
       } else if (activeIdx === parks.length - 1) {
-        const parksToDisplay = [...parks.slice(parks.length - 2), parks[0]];
+        const parksToDisplay = [
+          ...parks.slice(parks.length - 2),
+          parks[0],
+        ];
         setDisplayedParks(parksToDisplay);
       } else {
         setDisplayedParks(parks.slice(activeIdx - 1, activeIdx + 2));
       }
     }
   }, [activeIdx, showCarousel]);
+
+  useEffect(() => {
+    setDisplayedParks(parks.slice(0, 3));
+  }, [parks]);
 
   return (
     <Box
@@ -64,7 +73,7 @@ const ParksList: React.FC<ParksListProps> = ({
           component='div'
           color='black'
         >
-          {mode === 'PARKS' && `Dark sky parks in ${state}`}
+          {mode === 'PARKS' && `Dark sky parks in ${currentState}`}
           {mode === 'WISHLIST' && 'Wish List'}
           {mode === 'VISITED' && 'Visited'}
         </Typography>
@@ -81,8 +90,6 @@ const ParksList: React.FC<ParksListProps> = ({
             (park) => <ParkCard
             park={park}
             key={park.id}
-            handleWishList={handleWishList}
-            handleVisited={handleVisited}
             />,
           )
         }
@@ -92,7 +99,7 @@ const ParksList: React.FC<ParksListProps> = ({
           variant='h6'
           component='div'
           >
-            {mode === 'PARKS' && `No dark sky parks found in ${state}`}
+            {mode === 'PARKS' && `No dark sky parks found in ${currentState}`}
             {mode === 'WISHLIST' && 'No parks in wish list'}
             {mode === 'VISITED' && 'No visited parks'}
           </Typography>
@@ -105,7 +112,7 @@ const ParksList: React.FC<ParksListProps> = ({
         sx={{
           color: 'black', width: 1 / 5, mx: '25%', mb: '5%',
         }}
-        onClick={handleBack}>
+        onClick={() => { dispatch({ type: 'SET_PHASE', phase: 'INPUT' }); }}>
           {mode === 'PARKS' ? 'Try Another State' : 'Choose a state'}
       </Button>
     </Box>
