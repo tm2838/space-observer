@@ -1,12 +1,15 @@
 require('dotenv').config();
+
+const { GOOGLE_API_KEY } = process.env;
+
 const axios = require('axios');
 const jsdom = require('jsdom');
 
 const { JSDOM } = jsdom;
-const { GOOGLE_API_KEY } = process.env;
+
+const { scrapeImage, getAddress } = require('./webScraperUtils');
 
 const { Pool } = require('pg');
-
 const pool = new Pool({
   user: process.env.POSTGRES_USER,
   host: 'localhost',
@@ -16,49 +19,6 @@ const pool = new Pool({
 });
 
 let usParks;
-
-const scrapeImage = async (park) => axios({
-  method: 'get',
-  url: park.webPage,
-})
-  .then((res) => {
-    const dom = new JSDOM(res.data);
-    park.image = dom.window.document.querySelector('.post_image').src;
-  })
-  .catch((err) => {
-    console.log(park, err);
-  });
-
-const getParsedParkName = (park) => park.name.split(' ');
-
-const getAddress = async (park) => {
-  const nameString = getParsedParkName(park).join('%20').replace('á', 'a');
-  return axios({
-    method: 'get',
-    url: `https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=${nameString}&inputtype=textquery&fields=formatted_address%2Cgeometry&key=${GOOGLE_API_KEY}`,
-  })
-    .then((result) => {
-      const { lat, lng } = result.data.candidates[0].geometry.location;
-      return axios({
-        method: 'get',
-        url: `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${GOOGLE_API_KEY}`,
-      });
-    })
-    .then((r) => {
-      const candidates = r.data.results;
-      let state;
-      candidates.forEach((candidate) => candidate.address_components.forEach((address) => {
-        if (address.types.includes('administrative_area_level_1')) {
-          state = address.short_name;
-        }
-      }));
-      park.state = state;
-    })
-    .catch((err) => {
-      console.log(park, err);
-    });
-};
-
 // Main function to scrape parks
 axios({
   method: 'get',
