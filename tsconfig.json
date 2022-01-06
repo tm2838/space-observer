@@ -21,7 +21,7 @@
     "target": "ES6",
     "strict": false,
     "types": ["node"],
-    "outDir": "dist"
+    "outDir": "client/dist"
   },
   "include": ["client/src", "import-png.d.ts"]
 }
