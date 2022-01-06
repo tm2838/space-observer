@@ -10,6 +10,7 @@
     "test": "npm test",
     "lint": "eslint . --ext .js --ext .ts --ext .tsx",
     "prepare": "husky install",
+    "postinstall": "tsc && webpack --config webpack.config.js",
     "deploy": "git add . && git commit -m Heroku && git push heroku-space-observer master"
   },
   "author": "Tingjun Man",
