@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState, useContext } from 'react';
 import {
-  AppBar, Box, Toolbar, Typography, IconButton, Container, Avatar, Menu, MenuItem,
+  AppBar, Box, Toolbar, Typography, IconButton, Container, Menu, MenuItem,
 } from '@mui/material';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { mainContext } from '../spaceObserverContext';
-import UserProfile from '../static/userProfile.png';
+// import UserProfile from '../static/userProfile.png';
 
 const settings: string[] = ['Wish list', 'Visited', 'About the background'];
 
@@ -57,7 +57,7 @@ const NavBar: React.FC = () => {
             </Typography>
             <Box sx={{ ml: '80%' }}>
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt='user profile' src={UserProfile} />
+                {/* <Avatar alt='user profile' src={UserProfile} /> */}
               </IconButton>
               <Menu
                 sx={{ mt: '45px' }}
