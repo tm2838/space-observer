@@ -1,11 +1,10 @@
 import { createContext, Dispatch } from 'react';
 import {
-  Phase, Mode, Park, State,
+  Phase, Park, State,
 } from './types/types';
 
 interface SpaceObserverState {
   phase: Phase,
-  mode: Mode,
   wishList: Park[],
   visited: Park[],
   currentState: State,
@@ -14,7 +13,6 @@ interface SpaceObserverState {
 
 export const initialState: SpaceObserverState = {
   phase: 'INPUT',
-  mode: 'PARKS',
   wishList: [],
   visited: [],
   currentState: 'AL',
@@ -23,7 +21,6 @@ export const initialState: SpaceObserverState = {
 
 type SpaceObserverAction =
 | { type: 'SET_PHASE'; phase: Phase }
-| { type: 'SET_MODE'; mode: Mode }
 | { type: 'SET_WISHLIST'; park: Park }
 | { type: 'SET_VISITED'; park: Park }
 | { type: 'SET_STATE'; currentState: State }
@@ -61,8 +58,6 @@ export const reducer = (state: SpaceObserverState, action: SpaceObserverAction) 
   switch (action.type) {
     case 'SET_PHASE':
       return { ...state, phase: action.phase };
-    case 'SET_MODE':
-      return { ...state, mode: action.mode };
     case 'SET_WISHLIST':
       return wishListReducer(state, action);
     case 'SET_VISITED':

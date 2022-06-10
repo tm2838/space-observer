@@ -22,8 +22,10 @@ const App: React.FC = () => {
         backgroundImage: `url(${background})`,
         backgroundRepeat: 'no-repeat',
         backgroundSize: 'cover',
-        width: '100%',
-        height: '1000px',
+        backgroundAttachment: 'fixed',
+        width: '100vw',
+        height: '100vh',
+        margin: 0,
       }}>
         {background
           && <>

@@ -1,4 +1,5 @@
 import React, { useContext } from 'react';
+import { Routes, Route } from 'react-router-dom';
 import { Box } from '@mui/material';
 import UserInput from './inputStage/userInput';
 import ParksList from './displayStage/parksList';
@@ -8,7 +9,7 @@ import { mainContext } from '../spaceObserverContext';
 const ContentSection: React.FC = () => {
   const {
     state: {
-      phase, mode, parks, wishList, visited,
+      phase, parks, wishList, visited,
     },
   } = useContext(mainContext);
 
@@ -24,9 +25,13 @@ const ContentSection: React.FC = () => {
       }}
     >
       {phase === 'INPUT' && <UserInput />}
-      {phase === 'DISPLAY' && mode === 'PARKS' && <ParksList parks={parks} />}
-      {phase === 'DISPLAY' && mode === 'WISHLIST' && <ParksList parks={wishList} />}
-      {phase === 'DISPLAY' && mode === 'VISITED' && <ParksList parks={visited} />}
+      {phase === 'DISPLAY'
+      && <Routes>
+          <Route path='/' element={<ParksList parks={parks} />} />
+          <Route path='wishlist' element={<ParksList parks={wishList} />} />
+          <Route path='visited' element={<ParksList parks={visited} />} />
+        </Routes>
+      }
       {phase === 'LOADING' && <Loading />}
     </Box>
   );

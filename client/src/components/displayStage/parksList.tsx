@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { Box, Typography, Button } from '@mui/material';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCaretLeft, faCaretRight } from '@fortawesome/free-solid-svg-icons';
@@ -12,13 +13,15 @@ interface ParkListProps {
 const ParksList: React.FC<ParkListProps> = ({ parks }) => {
   const {
     state: {
-      mode, currentState,
+      currentState,
     },
     dispatch,
   } = useContext(mainContext);
   const [activeIdx, setActiveIdx] = useState<number>(1);
   const [displayedParks, setDisplayedParks] = useState<Park[]>(parks.slice(0, 3));
   const showCarousel = parks.length > 3;
+  const { pathname } = useLocation();
+  const navigate = useNavigate();
 
   const handleRight = () => {
     if (activeIdx === parks.length - 1) {
@@ -73,9 +76,9 @@ const ParksList: React.FC<ParkListProps> = ({ parks }) => {
           component='div'
           color='black'
         >
-          {mode === 'PARKS' && `Dark sky parks in ${currentState}`}
-          {mode === 'WISHLIST' && 'Wish List'}
-          {mode === 'VISITED' && 'Visited'}
+          {(pathname === '' || pathname === '/') && `Dark sky parks in ${currentState}`}
+          {pathname === '/wishlist' && 'Wish List'}
+          {pathname === '/visited' && 'Visited'}
         </Typography>
       </Box>
 
@@ -99,9 +102,9 @@ const ParksList: React.FC<ParkListProps> = ({ parks }) => {
           variant='h6'
           component='div'
           >
-            {mode === 'PARKS' && `No dark sky parks found in ${currentState}`}
-            {mode === 'WISHLIST' && 'No parks in wish list'}
-            {mode === 'VISITED' && 'No visited parks'}
+            {(pathname === '' || pathname === '/') && `No dark sky parks found in ${currentState}`}
+            {pathname === '/wishlist' && 'No parks in wish list'}
+            {pathname === '/visited' && 'No visited parks'}
           </Typography>
         }
       </Box>
@@ -112,8 +115,12 @@ const ParksList: React.FC<ParkListProps> = ({ parks }) => {
         sx={{
           color: 'black', width: 1 / 5, mx: '25%', mb: '5%',
         }}
-        onClick={() => { dispatch({ type: 'SET_PHASE', phase: 'INPUT' }); }}>
-          {mode === 'PARKS' ? 'Try Another State' : 'Choose a state'}
+        onClick={() => {
+          dispatch({ type: 'SET_PHASE', phase: 'INPUT' });
+          dispatch({ type: 'SET_PARKS', parks: [] });
+          navigate('/', { replace: true });
+        }}>
+          {(pathname === '' || pathname === '/') ? 'Try Another State' : 'Choose a state'}
       </Button>
     </Box>
   );

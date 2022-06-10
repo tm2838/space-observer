@@ -7,7 +7,6 @@ const UserInput: React.FC = () => {
   const { state: { currentState }, dispatch } = useContext(mainContext);
 
   const handleConfirm = () => {
-    dispatch({ type: 'SET_MODE', mode: 'PARKS' });
     dispatch({ type: 'SET_PHASE', phase: 'LOADING' });
     fetch(`/searchParks?state=${currentState}`)
       .then((results) => {
