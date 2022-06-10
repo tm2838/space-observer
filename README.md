@@ -1,6 +1,11 @@
 # Space Observer
 
-An app providing info about dark sky parks located in your state.
+An app providing info about dark sky parks located in your state.  
+
+Display a different background image from [NASA APOD API](https://api.nasa.gov/) on each refresh.
+
+## Demo
+![ezgif com-gif-maker (9)](https://user-images.githubusercontent.com/43324065/173159239-c5e88d35-78a8-4dcb-9292-374911edba85.gif)
 
 ## Dependencies
 
